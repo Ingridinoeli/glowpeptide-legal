@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glow Peptide — 30% Off</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:#05090F; color:#fff; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
+  .logo { font-size:28px; font-weight:900; letter-spacing:-1px; margin-bottom:32px; text-align:center; }
+  .logo span { color:#00D4AA; }
+  .card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:28px; padding:40px 28px; max-width:400px; width:100%; text-align:center; }
+  .offer { background:linear-gradient(135deg,#00D4AA,#6366F1); border-radius:100px; padding:10px 24px; font-size:15px; font-weight:900; display:inline-block; margin-bottom:24px; }
+  h1 { font-size:28px; font-weight:900; letter-spacing:-1px; margin-bottom:12px; line-height:1.2; }
+  h1 span { color:#00D4AA; }
+  .sub { font-size:14px; color:rgba(255,255,255,0.55); line-height:22px; margin-bottom:28px; }
+  .cta { display:block; background:#00D4AA; color:#000; font-size:17px; font-weight:900; padding:18px; border-radius:16px; text-decoration:none; margin-bottom:10px; }
+  .ref-pill { background:rgba(0,212,170,0.1); border:1px solid rgba(0,212,170,0.25); border-radius:12px; padding:12px 16px; font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:20px; }
+  .ref-pill strong { color:#00D4AA; font-size:16px; font-family:monospace; display:block; margin-top:4px; }
+  .legal { font-size:10px; color:rgba(255,255,255,0.2); line-height:17px; margin-top:20px; }
+  .legal a { color:rgba(255,255,255,0.3); }
+  .spinner { margin:20px auto; width:40px; height:40px; border:3px solid rgba(0,212,170,0.2); border-top-color:#00D4AA; border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="logo">Glow<span>Peptide</span></div>
+<div class="card">
+  <div class="offer">🎁 30% OFF Primeiro Mês</div>
+  <h1>Rastreie seu <span>Protocolo</span> como um Pro</h1>
+  <p class="sub">Doses, composição corporal, IA personalizada e biblioteca com 28 compostos.</p>
+
+  <div class="ref-pill" id="refBox" style="display:none">
+    Indicado por: <strong id="refDisplay"></strong>
+    Seu desconto de 30% será aplicado automaticamente
+  </div>
+
+  <div class="spinner" id="spinner"></div>
+
+  <a class="cta" id="appStoreBtn" href="https://apps.apple.com/app/id6766988456" style="display:none">
+    🍎 Baixar no App Store
+  </a>
+
+  <p class="legal">
+    ⚕️ Ferramenta educacional apenas. Não é conselho médico.<br>
+    <a href="privacy.html">Privacidade</a> · <a href="terms.html">Termos</a>
+  </p>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search)
+  const ref = params.get('ref') || ''
+
+  if (ref) {
+    document.getElementById('refBox').style.display = 'block'
+    document.getElementById('refDisplay').textContent = ref.toUpperCase()
+  }
+
+  const appStoreURL = 'https://apps.apple.com/app/id6766988456'
+  const deepLink = ref
+    ? 'peptrack://join?ref=' + encodeURIComponent(ref)
+    : 'peptrack://'
+
+  function showFallback() {
+    document.getElementById('spinner').style.display = 'none'
+    document.getElementById('appStoreBtn').style.display = 'block'
+  }
+
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    // Try to open app directly
+    window.location.href = deepLink
+    // If app not installed, show App Store button after 2s
+    setTimeout(showFallback, 2000)
+  } else {
+    // Non-iOS: show App Store link directly
+    showFallback()
+  }
+</script>
+</body>
+</html>
