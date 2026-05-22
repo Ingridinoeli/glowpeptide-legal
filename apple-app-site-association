@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["com.ingridinoeli.peptrack"],
+        "components": [
+          {
+            "/": "/join*",
+            "comment": "Referral join link"
+          }
+        ]
+      }
+    ]
+  }
+}
