@@ -65,15 +65,20 @@
     // sem isso, a pessoa baixa, abre o app, e o código nunca aparece lá.
     document.getElementById('refInstructions').textContent =
       'Depois de instalar, abra o app e cole esse código na tela de cadastro (campo "Have a referral code?") pra garantir seu mês grátis extra.'
+    function copyCode(onDone) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(onDone).catch(onDone)
+      } else if (onDone) { onDone() }
+    }
     document.getElementById('copyBtn').addEventListener('click', function () {
       const btn = this
-      const done = () => { btn.textContent = '✓ Copiado!'; setTimeout(() => { btn.textContent = '📋 Copiar código' }, 2000) }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).then(done).catch(done)
-      } else {
-        done()
-      }
+      copyCode(() => { btn.textContent = '✓ Copiado!'; setTimeout(() => { btn.textContent = '📋 Copiar código' }, 2000) })
     })
+    // Tenta copiar sozinho ao carregar a página — funciona em parte dos
+    // navegadores (ex: Chrome/Android). O Safari no iOS bloqueia clipboard
+    // sem toque direto do usuário, por isso o botão acima continua visível
+    // como garantia — essa chamada só é um bônus silencioso quando permitido.
+    copyCode()
   }
 
   const appStoreURL = 'https://apps.apple.com/app/id6766988456'
