@@ -18,6 +18,9 @@
   .cta { display:block; background:#00D4AA; color:#000; font-size:17px; font-weight:900; padding:18px; border-radius:16px; text-decoration:none; margin-bottom:10px; }
   .ref-pill { background:rgba(0,212,170,0.1); border:1px solid rgba(0,212,170,0.25); border-radius:12px; padding:12px 16px; font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:20px; }
   .ref-pill strong { color:#00D4AA; font-size:16px; font-family:monospace; display:block; margin-top:4px; }
+  .copy-btn { margin-top:10px; background:rgba(0,212,170,0.15); border:1px solid rgba(0,212,170,0.3); color:#00D4AA; font-size:12px; font-weight:700; padding:8px 14px; border-radius:100px; cursor:pointer; }
+  .copy-btn:active { background:rgba(0,212,170,0.3); }
+  .ref-instructions { margin-top:10px; font-size:11px; color:rgba(255,255,255,0.45); line-height:16px; }
   .legal { font-size:10px; color:rgba(255,255,255,0.2); line-height:17px; margin-top:20px; }
   .legal a { color:rgba(255,255,255,0.3); }
   .spinner { margin:20px auto; width:40px; height:40px; border:3px solid rgba(0,212,170,0.2); border-top-color:#00D4AA; border-radius:50%; animation:spin 0.8s linear infinite; }
@@ -33,6 +36,8 @@
 
   <div class="ref-pill" id="refBox" style="display:none">
     Indicado por: <strong id="refDisplay"></strong>
+    <button class="copy-btn" id="copyBtn" type="button">📋 Copiar código</button>
+    <p class="ref-instructions" id="refInstructions"></p>
   </div>
 
   <div class="spinner" id="spinner"></div>
@@ -52,8 +57,23 @@
   const ref = params.get('ref') || ''
 
   if (ref) {
+    const code = ref.toUpperCase()
     document.getElementById('refBox').style.display = 'block'
-    document.getElementById('refDisplay').textContent = ref.toUpperCase()
+    document.getElementById('refDisplay').textContent = code
+    // Instrução crítica: instalação nova da App Store não carrega esse código
+    // pro app sozinha (limitação da Apple sem um MMP tipo AppsFlyer/Branch) —
+    // sem isso, a pessoa baixa, abre o app, e o código nunca aparece lá.
+    document.getElementById('refInstructions').textContent =
+      'Depois de instalar, abra o app e cole esse código na tela de cadastro (campo "Have a referral code?") pra garantir seu mês grátis extra.'
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      const btn = this
+      const done = () => { btn.textContent = '✓ Copiado!'; setTimeout(() => { btn.textContent = '📋 Copiar código' }, 2000) }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done).catch(done)
+      } else {
+        done()
+      }
+    })
   }
 
   const appStoreURL = 'https://apps.apple.com/app/id6766988456'
